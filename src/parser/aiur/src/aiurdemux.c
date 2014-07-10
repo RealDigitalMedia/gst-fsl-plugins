@@ -1187,6 +1187,7 @@ static const GstQueryType *
 gst_aiurdemux_get_src_query_types (GstPad * pad)
 {
   static const GstQueryType src_types[] = {
+    GST_QUERY_POSITION,
     GST_QUERY_DURATION,
     GST_QUERY_SEEKING,
     0
@@ -1220,7 +1221,33 @@ gst_aiurdemux_handle_src_query (GstPad * pad, GstQuery * query)
   GST_LOG_OBJECT (pad, "%s query", GST_QUERY_TYPE_NAME (query));
 
   switch (GST_QUERY_TYPE (query)) {
+    case GST_QUERY_POSITION:{
+      GstFormat format;
+      gint64 timeposition;
 
+      gst_query_parse_position (query, &format, NULL);
+
+      timeposition = stream->time_position;
+      if (!(GST_CLOCK_TIME_IS_VALID (timeposition)))
+        break;
+
+      switch (format) {
+        case GST_FORMAT_TIME:
+          gst_query_set_position (query, GST_FORMAT_TIME, timeposition);
+          res = TRUE;
+          break;
+        case GST_FORMAT_DEFAULT:
+          /* TODO */
+          break;
+        case GST_FORMAT_BYTES:
+          /* TODO */
+          break;
+        default:
+          break;
+      }
+
+      break;
+    }
     case GST_QUERY_DURATION:{
       GstFormat fmt;
 
