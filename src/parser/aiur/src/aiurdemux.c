@@ -1224,7 +1224,7 @@ gst_aiurdemux_handle_src_query (GstPad * pad, GstQuery * query)
     case GST_QUERY_POSITION:{
       GstFormat format;
       gint64 timeposition;
-      AiurDemuxStream *stream = demux->streams[0];
+      AiurDemuxStream *stream = aiurdemux->streams[0];
 
       if (!stream)
         break;
