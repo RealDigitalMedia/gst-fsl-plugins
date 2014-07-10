@@ -1059,7 +1059,7 @@ gst_beepdec_state_change (GstElement * element, GstStateChange transition)
       beepdec_core_close (beepdec);
       MM_DEINIT_DBG_MEM ();
 #ifdef MFW_TIME_PROFILE
-      GST_OBJECT_LOG (beepdec, "total decoding time %" GST_TIME_FORMAT,
+      GST_LOG_OBJECT (beepdec, "total decoding time %" GST_TIME_FORMAT,
           GST_TIME_ARGS (beepdec->tp_stat.decodetime));
 #endif
       break;

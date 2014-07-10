@@ -436,14 +436,14 @@ vpuenc_core_init (GstVpuEnc * vpuenc)
   CORE_API (VPU_EncGetVersionInfo, goto fail, core_ret, &version);
   CORE_API (VPU_EncGetWrapperVersionInfo, goto fail, core_ret, &w_version);
 
-  GST_OBJECT_LOG (vpuenc, ("vpuenc versions :)"));
-  GST_OBJECT_LOG (vpuenc, ("plugin: %s", VERSION));
-  GST_OBJECT_LOG (vpuenc, ("wrapper: %d.%d.%d(%s)", w_version.nMajor,
+  GST_LOG_OBJECT (vpuenc, ("vpuenc versions :)"));
+  GST_LOG_OBJECT (vpuenc, ("plugin: %s", VERSION));
+  GST_LOG_OBJECT (vpuenc, ("wrapper: %d.%d.%d(%s)", w_version.nMajor,
           w_version.nMinor, w_version.nRelease,
           (w_version.pBinary ? w_version.pBinary : "unknown")));
-  GST_OBJECT_LOG (vpuenc, ("vpulib: %d.%d.%d", version.nLibMajor,
+  GST_LOG_OBJECT (vpuenc, ("vpulib: %d.%d.%d", version.nLibMajor,
           version.nLibMinor, version.nLibRelease));
-  GST_OBJECT_LOG (vpuenc, ("firmware: %d.%d.%d.%d", version.nFwMajor,
+  GST_LOG_OBJECT (vpuenc, ("firmware: %d.%d.%d.%d", version.nFwMajor,
           version.nFwMinor, version.nFwRelease, version.nFwCode));
 
   CORE_API (VPU_EncQueryMem, goto fail, core_ret, &vpuenc->context.meminfo);
