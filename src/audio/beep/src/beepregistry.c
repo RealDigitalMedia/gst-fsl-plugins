@@ -275,8 +275,8 @@ _beep_core_create_interface_from_entry (BeepCoreDlEntry * dlentry)
   if (inf->getVersionInfo) {
     const char *version = (inf->getVersionInfo) ();
     if (version) {
-      g_print (BLUE_STR
-          ("Beep: %s \nCore: %s\n  mime: %s\n  file: %s\n",
+      GST_LOG (
+          ("Beep: %s Core: %s  mime: %s  file: %s",
               VERSION, version, dlentry->mime, dlentry->dl_name));
     }
   }

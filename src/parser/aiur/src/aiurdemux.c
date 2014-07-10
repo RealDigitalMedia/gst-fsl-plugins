@@ -2211,16 +2211,16 @@ aiurdemux_print_content_info (GstAiurDemux * demux)
   AiurDemuxStream *stream;
   int i;
 
-  g_print (BLUE_STR ("Content Info:\n"));
+  GST_OBJECT_LOG (demux, ("Content Info:"));
 
   if (content_info->uri) {
     aiurdemux_pretty_print_info ("URI", content_info->uri, 80);
   }
   if (content_info->index_file)
     aiurdemux_pretty_print_info ("Idx File", content_info->index_file, 80);
-  g_print (BLUE_STR ("\tSeekable  : %s\n",
+  GST_OBJECT_LOG(demux, "Seekable  : %s",
           (content_info->seekable ? "Yes" : "No")));
-  g_print (BLUE_STR ("\tSize(byte): %lld\n\n", content_info->length));
+  GST_OBJECT_LOG(demux,"Size(byte): %lld", content_info->length));
 
 }
 
@@ -2559,8 +2559,8 @@ aiurdemux_check_discont (GstAiurDemux * demux, AiurDemuxStream * stream)
           (GST_MSECOND * demux->config.retimestamp_threashold_ms))) {
     //GST_BUFFER_FLAG_SET(gstbuf, GST_BUFFER_FLAG_DISCONT);
 
-    g_print (RED_STR ("Discont detected from %" GST_TIME_FORMAT " to %"
-            GST_TIME_FORMAT "\n", GST_TIME_ARGS (stream->last_stop),
+    GST_OBJECT_LOG (demux, ("Discont detected from %" GST_TIME_FORMAT " to %"
+            GST_TIME_FORMAT, GST_TIME_ARGS (stream->last_stop),
             GST_TIME_ARGS (stream->sample_stat.start)));
     demux->discont_check_track = stream->track_idx;
     aiurdemux_make_discont (demux,
@@ -2574,7 +2574,7 @@ aiurdemux_adjust_timestamp (GstAiurDemux * demux, AiurDemuxStream * stream,
     GstBuffer * buffer)
 {
 
-  //g_print("adjust orig %"GST_TIME_FORMAT" base %"GST_TIME_FORMAT" pos %"GST_TIME_FORMAT"\n",
+  //GST_OBJECT_LOG(demux, "adjust orig %"GST_TIME_FORMAT" base %"GST_TIME_FORMAT" pos %"GST_TIME_FORMAT,
   //     GST_TIME_ARGS(stream->sample_stat.start), GST_TIME_ARGS(demux->base_offset), GST_TIME_ARGS(stream->time_position));
 
   if ((demux->base_offset == 0)
@@ -2669,14 +2669,14 @@ aiurdemux_print_track_info (AiurDemuxStream * stream)
   if ((stream) && (stream->pad) && (stream->caps)) {
     gchar *mime = gst_caps_to_string (stream->caps);
     gchar *padname = gst_pad_get_name (stream->pad);
-    g_print (BLUE_STR ("Track %02d [%s] Enabled\n", stream->track_idx,
+    GST_OBJECT_LOG (stream, ("Track %02d [%s] Enabled", stream->track_idx,
             padname ? padname : ""));
     if (stream->program) {
-      g_print (BLUE_STR ("\tppid: %d, ppid %d\n", stream->ppid, stream->pid));
+      GST_OBJECT_LOG (stream, ("ppid: %d, ppid %d", stream->ppid, stream->pid));
     }
-    g_print (BLUE_STR ("\tDuration: %" GST_TIME_FORMAT "\n",
+    GST_OBJECT_LOG (stream, ("Duration: %" GST_TIME_FORMAT,
             GST_TIME_ARGS (stream->duration)));
-    g_print (BLUE_STR ("\tLanguage: %s\n", stream->lang));
+    GST_OBJECT_LOG (stream, ("Language: %s", stream->lang));
     if (mime) {
       aiurdemux_pretty_print_info ("Mime", mime, 80);
       g_free (mime);
@@ -2685,9 +2685,9 @@ aiurdemux_print_track_info (AiurDemuxStream * stream)
       g_free (padname);
     }
   } else {
-    g_print (BLUE_STR ("Track %02d [%s]: Disabled\n", stream->track_idx,
+    GST_OBJECT_LOG (stream, ("Track %02d [%s]: Disabled", stream->track_idx,
             AIUR_MEDIATYPE2STR (stream->type)));
-    g_print (BLUE_STR ("\tCodec: %ld, SubCodec: %ld\n",
+    GST_OBJECT_LOG (stream, ("Codec: %ld, SubCodec: %ld",
             stream->codec_type, stream->codec_sub_type));
   }
 }
@@ -3543,16 +3543,16 @@ aiurdemux_pretty_print_info (gchar * title, gchar * data, int max_raw)
 {
   int len = strlen (data);
   gchar *tmp = data;
-  g_print (BLUE_STR ("\t%s:\n", title));
+  GST_LOG (("%s:", title));
   while (len > 0) {
     gchar c;
     if (len > max_raw) {
       c = tmp[max_raw];
       tmp[max_raw] = '\0';
-      g_print (BLUE_STR ("\t      %s\n", tmp));
+      GST_LOG (("      %s", tmp));
       tmp[max_raw] = c;
     } else {
-      g_print (BLUE_STR ("\t      %s\n", tmp));
+      GST_LOG (("      %s", tmp));
     }
     len -= max_raw;
     tmp += max_raw;
@@ -3600,24 +3600,24 @@ aiurdemux_print_clip_info (GstAiurDemux * demux)
   AiurDemuxClipInfo *clip_info = &demux->clip_info;
   AiurDemuxStream *stream;
   int i;
-  g_print (BLUE_STR ("Movie Info:\n"));
-  g_print (BLUE_STR ("\tSeekable  : %s\n",
+  GST_OBJECT_LOG (demux, ("Movie Info:"));
+  GST_OBJECT_LOG (demux, ("Seekable  : %s",
           (clip_info->seekable ? "Yes" : "No")));
-  g_print (BLUE_STR ("\tLive      : %s\n", (clip_info->live ? "Yes" : "No")));
-  g_print (BLUE_STR ("\tDuration  : %" GST_TIME_FORMAT "\n",
+  GST_OBJECT_LOG (demux, ("Live      : %s", (clip_info->live ? "Yes" : "No")));
+  GST_OBJECT_LOG (demux, ("Duration  : %" GST_TIME_FORMAT,
           GST_TIME_ARGS (clip_info->duration)));
-  g_print (BLUE_STR ("\tReadMode  : %s\n",
+  GST_OBJECT_LOG (demux, ("ReadMode  : %s",
           ((clip_info->read_mode ==
                   PARSER_READ_MODE_FILE_BASED) ? "File" : "Track")));
   if (clip_info->auto_retimestamp) {
-    g_print (BLUE_STR ("\tAutoRetimestamp: %dms\n",
+    GST_OBJECT_LOG (demux, ("AutoRetimestamp: %dms",
             demux->config.retimestamp_threashold_ms));
   }
 
   if (clip_info->program_num) {
-    g_print (BLUE_STR ("\tprograms    : %ld\n", clip_info->program_num));
+    GST_OBJECT_LOG (demux, ("programs    : %ld", clip_info->program_num));
   }
-  g_print (BLUE_STR ("\tTrack     : %ld\n\n", clip_info->track_num));
+  GST_OBJECT_LOG (demux, ("Track     : %ld", clip_info->track_num));
 }
 
 
@@ -4009,7 +4009,7 @@ aiurdemux_check_interleave_stream_eos (GstAiurDemux * demux)
     }
     if(bQueueFull && (min_stream->buf_queue) && (g_queue_is_empty (min_stream->buf_queue))){
         MARK_STREAM_EOS (demux, min_stream);
-		 g_print (BLUE_STR  ("file mode interleave detect !!! send EOS to track%d \n",track_num));
+      GST_OBJECT_LOG (demux,  ("file mode interleave detect !!! send EOS to track%d ",track_num));
     }
     return;
 }

@@ -528,14 +528,14 @@ vpudec_core_init (GstVpuDec * vpudec)
   CORE_API (VPU_DecGetVersionInfo, goto fail, core_ret, &version);
   CORE_API (VPU_DecGetWrapperVersionInfo, goto fail, core_ret, &w_version);
 
-  g_print (GREEN_STR ("vpudec versions :)\n"));
-  g_print (GREEN_STR ("\tplugin: %s\n", VERSION));
-  g_print (GREEN_STR ("\twrapper: %d.%d.%d(%s)\n", w_version.nMajor,
+  GST_OBJECT_LOG (vpudec, ("vpudec versions :)"));
+  GST_OBJECT_LOG (vpudec, ("plugin: %s", VERSION));
+  GST_OBJECT_LOG (vpudec, ("wrapper: %d.%d.%d(%s)", w_version.nMajor,
           w_version.nMinor, w_version.nRelease,
           (w_version.pBinary ? w_version.pBinary : "unknown")));
-  g_print (GREEN_STR ("\tvpulib: %d.%d.%d\n", version.nLibMajor,
+  GST_OBJECT_LOG (vpudec, ("vpulib: %d.%d.%d", version.nLibMajor,
           version.nLibMinor, version.nLibRelease));
-  g_print (GREEN_STR ("\tfirmware: %d.%d.%d.%d\n", version.nFwMajor,
+  GST_OBJECT_LOG (vpudec, ("firmware: %d.%d.%d.%d", version.nFwMajor,
           version.nFwMinor, version.nFwRelease, version.nFwCode));
 
   CORE_API (VPU_DecQueryMem, goto fail, core_ret, &vpudec->context.meminfo);
@@ -1740,7 +1740,7 @@ gst_vpudec_state_change (GstElement * element, GstStateChange transition)
       vpudec_core_deinit (vpudec);
       MM_DEINIT_DBG_MEM ();
       if (vpudec->options.profiling) {
-        g_print ("total decode time %" GST_TIME_FORMAT "\n",
+        GST_OBJECT_LOG ("total decode time %" GST_TIME_FORMAT,
             GST_TIME_ARGS (vpudec->profile_count.decode_time));
       }
       break;
