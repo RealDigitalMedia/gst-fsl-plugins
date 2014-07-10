@@ -1224,6 +1224,10 @@ gst_aiurdemux_handle_src_query (GstPad * pad, GstQuery * query)
     case GST_QUERY_POSITION:{
       GstFormat format;
       gint64 timeposition;
+      AiurDemuxStream *stream = demux->streams[0];
+
+      if (!stream)
+        break;
 
       gst_query_parse_position (query, &format, NULL);
 
@@ -2219,8 +2223,8 @@ aiurdemux_print_content_info (GstAiurDemux * demux)
   if (content_info->index_file)
     aiurdemux_pretty_print_info ("Idx File", content_info->index_file, 80);
   GST_LOG_OBJECT(demux, "Seekable  : %s",
-          (content_info->seekable ? "Yes" : "No")));
-  GST_LOG_OBJECT(demux,"Size(byte): %lld", content_info->length));
+          (content_info->seekable ? "Yes" : "No"));
+  GST_LOG_OBJECT(demux,"Size(byte): %lld", content_info->length);
 
 }
 
